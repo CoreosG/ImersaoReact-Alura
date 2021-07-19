@@ -19,24 +19,49 @@ function ProfileSideBar(properties) {
     </Box>
   )
 }
+function ProfileRelationsBox(properties) {
+  return (
+    <ProfileRelationsBoxWrapper>
+            <h2 className="smallTitle">
+              {properties.title} ({properties.items.length})
+            </h2>
+
+            {/* <ul>
+              {properties.items.map((itemAtual) => {
+                return (
+                  <li key={itemAtual}>
+                    <a href={`/users/${itemAtual}`} key={itemAtual}>
+                    <img src={`https://github.com/${itemAtual}.png`} />
+                    <span>{itemAtual}</span>
+                    </a>
+                  </li> 
+                )
+              })}
+            </ul> */}
+    </ProfileRelationsBoxWrapper>
+  )
+}
 
 // tentativa de adicionar followers do github
-async function fetchFollowers(githubUser) {
-  let response = await fetch(`https://api.github.com/users/${githubUser}/followers`);
-  let data = await response.json();
+// async function fetchFollowers(githubUser) {
+
+//   return 
+
+//   let response = await fetch(`https://api.github.com/users/${githubUser}/followers`);
+//   let data = await response.json();
   
-  return data.map((current) => {
-    return current.login;
-  });
-}
-function MyFollowers(githubUser) {
-  let followers = [];
-  fetchFollowers(githubUser)
-  .then((item)=> {
-    followers.push(item);
-  });
-  return followers;
-}
+//   return data.map((current) => {
+//     return current.login;
+//   });
+// }
+// function MyFollowers(githubUser) {
+//   let followers = [];
+//   fetchFollowers(githubUser)
+//   .then((item)=> {
+//     followers.push(item);
+//   });
+//   return followers;
+// }
 
 export default function Home() {
   const githubUser = 'CoreosG';
@@ -46,9 +71,26 @@ export default function Home() {
     title: 'Eu odeio acordar cedo',
     image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg'
   }]);
-  const followers = MyFollowers(githubUser);
 
-  console.log('Nosso teste ', comunidades[1]);
+  const [followers, setFollowers] = React.useState([]);
+
+  React.useEffect(function () {
+    fetch(`https://api.github.com/users/${githubUser}/followers`)
+    .then(function (answer) {
+      if(answer.ok){
+        return answer.json();
+      }
+      throw new Error('Algo de errado não está certo: '+ answer.status);
+    })
+    .then(function (user) {
+      setFollowers(user);
+    })
+    .catch(function (error) {
+      console.error(error);
+    })
+  }, [])
+
+  console.log(followers);
   
 
   return (
@@ -103,42 +145,9 @@ export default function Home() {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{gridArea: 'profileRelationsArea'}}>
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Seguidores ({followers.length})
-            </h2>
-            <ul>
-              {followers.map((itemAtual) => {
-                return (
-                  <li key={itemAtual}>
-                    <a href={`/users/${itemAtual}`} key={itemAtual}>
-                    <img src={`https://github.com/${itemAtual}.png`} />
-                    <span>{itemAtual}</span>
-                    </a>
-                  </li> 
-                )
-              })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
+          <ProfileRelationsBox title="Seguidores" items={followers} />
 
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Pessoas da comunidade ({pessoasFavoritas.length})
-            </h2>
-
-            <ul>
-              {pessoasFavoritas.map((itemAtual) => {
-                return (
-                  <li key={itemAtual}>
-                    <a href={`/users/${itemAtual}`} key={itemAtual}>
-                    <img src={`https://github.com/${itemAtual}.png`} />
-                    <span>{itemAtual}</span>
-                    </a>
-                  </li> 
-                )
-              })}
-            </ul>
-          </ProfileRelationsBoxWrapper>
+          <ProfileRelationsBox title="Pessoas da comunidade" items={pessoasFavoritas}/>
           
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
