@@ -347,12 +347,19 @@ const AlurakutLoginScreen = css`
     --textTertiaryColor: #5A5A5A;
     --textQuarternaryColor: #C5C6CA;
     --commonRadius: 8px;
+    height: 100%;
+    position: relative;
   }
 
 
   .loginScreen {
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
     padding: 16px;
     max-width: 1110px;
+    opacity: 0.97;
     display: grid;
     --gap: 12px;
     --gutter: 16px;
@@ -361,6 +368,7 @@ const AlurakutLoginScreen = css`
       "logoArea"
       "formArea"
       "footerArea";
+    margin: auto;
     @media(min-width: 860px) {
       grid-template-columns: 2fr 1fr;
       grid-template-areas: 

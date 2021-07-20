@@ -1,9 +1,11 @@
 import React from 'react';
-import MainGrid from '../src/components/MainGrid'
-import Box from '../src/components/Box'
+import MainGrid from '../src/components/MainGrid';
+import Box from '../src/components/Box';
+import nookies from 'nookies';
+import jwt from 'jsonwebtoken';
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AluraKutCommons';
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
-import { Body } from 'node-fetch';
+import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
+import BackgroundImage from '../src/components/BackgroundImage';
 
 function ProfileSideBar(properties) {
   return ( 
@@ -43,8 +45,8 @@ function ProfileRelationsBox(properties) {
   )
 }
 
-export default function Home() {
-  const githubUser = 'CoreosG';
+export default function Home(props) {
+  const githubUser = props.githubUser;
   const [pessoasFavoritas, setPessoasFavoritas] = React.useState([]); //['Peas', 'omariosouto', 'juunegreiros', 'felipefialho'];
   const [comunidades, setComunidades] = React.useState([]);
   const [followers, setFollowers] = React.useState([]);
@@ -114,6 +116,7 @@ export default function Home() {
   
   return (
     <>
+      <BackgroundImage>
       <AlurakutMenu githubUser={githubUser}/>
       <MainGrid>
         {/*<Box style="grid-area: profileArea;"*/}
@@ -202,6 +205,37 @@ export default function Home() {
         </div>
             
       </MainGrid>
+      </BackgroundImage>
     </>
   )
+}
+
+
+export async function getServerSideProps(context) {
+
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+  const { isAuthenticated } = await fetch("http://localhost:3000/api/auth", {
+    headers: {
+      Authorization: token,
+    },
+  })
+  .then((resposta) => resposta.json())
+
+  if(!isAuthenticated){
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+
+  const {githubUser} = jwt.decode(token);
+  return {
+    props: {
+      githubUser,
+    }, // will be passed to the page components as props
+  }
+  
 }

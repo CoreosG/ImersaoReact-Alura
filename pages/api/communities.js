@@ -13,7 +13,6 @@ export default async function getRequests(request, response) {
         })
     
         response.json({
-            data: "qsdasdasa",
             registroCriado: registroCriado,
         })
         return ;

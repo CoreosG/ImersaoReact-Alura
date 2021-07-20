@@ -10,10 +10,15 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-image: url("https://theartmad.com/wp-content/uploads/2015/08/Doctor-Who-Wallpaper-Tardis-In-Space-1.png");
-    background-size: cover;
-    background-color: #D9E6F6;
+    /* background-color: #D9E6F6; */
     font-family: sans-serif;
+    min-height: 100% !important;
+    height: 100%;
+    background-image: linear-gradient(to left, #010705, #020202)
+  }
+
+  html {
+    height: 100%;
   }
 
   #_next {
