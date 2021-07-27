@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const BackgroundImage = styled.div`
-    background-image: url("https://theartmad.com/wp-content/uploads/2015/08/Doctor-Who-Wallpaper-Tardis-In-Space-1.png");
+    background-image: url("https://wallpaperaccess.com/full/235784.jpg");
     height: 100vh;
     min-height: 100%;
     width: 100vw;
